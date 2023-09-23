@@ -6,6 +6,7 @@ import com.ongidideveloper.ToDoApp.model.Employee;
 import com.ongidideveloper.ToDoApp.repository.EmployeeRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +46,12 @@ public class EmployeeController {
         updateEmployee.setEmailID(employeeDetails.getEmailID());
         employeeRepository.save(updateEmployee);
         return ResponseEntity.ok(updateEmployee);
+    }
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Employee> DeleteEmployee(@PathVariable  long id){
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id:" + id));
+        employeeRepository.delete(employee);
+        return ResponseEntity.ok(employee);
     }
 }
